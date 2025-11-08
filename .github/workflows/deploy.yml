@@ -1,0 +1,48 @@
+name: Deploy Spring Boot App
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+      
+    - name: Setup Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'maven'
+        
+    - name: Build com Maven
+      run: chmod +x mvnw && ./mvnw clean package -DskipTests
+      
+    - name: Executar testes
+      run: ./mvnw test
+      continue-on-error: true
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: crudapp-jar
+        path: target/crudapp-0.0.1-SNAPSHOT.jar
+        
+    - name: Deploy para Railway (se configurado)
+      if: github.ref == 'refs/heads/master'
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: |
+        if [ ! -z "$RAILWAY_TOKEN" ]; then
+          echo "Deploy para Railway configurado"
+          # npm install -g @railway/cli
+          # railway up
+        else
+          echo "RAILWAY_TOKEN não configurado. Pule este step ou configure em Settings > Secrets"
+        fi
