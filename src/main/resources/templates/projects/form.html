@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${project.id == null ? 'Criar Novo Projeto' : 'Editar Projeto'}">Formulário Projeto</title>
+</head>
+<body>
+<h1 th:text="${project.id == null ? 'Criar Novo Projeto' : 'Editar Projeto ' + project.id}">Título</h1>
+
+<form th:action="@{/projects/save}" th:object="${project}" method="post">
+    <input type="hidden" th:field="*{id}">
+
+    <div>
+        <label for="name">Nome do Projeto:</label>
+        <input type="text" id="name" th:field="*{name}" required>
+    </div>
+
+    <div>
+        <label for="description">Descrição:</label>
+        <textarea id="description" th:field="*{description}" rows="3"></textarea>
+    </div>
+
+    <div>
+        <label for="completed">Status:</label>
+        <input type="checkbox" id="completed" th:field="*{completed}"> Concluído
+    </div>
+
+    <div>
+        <label for="startDate">Data Início:</label>
+        <input type="date" id="startDate" th:field="*{startDate}" required>
+    </div>
+
+    <div>
+        <label for="endDate">Data Fim (Opcional):</label>
+        <input type="date" id="endDate" th:field="*{endDate}">
+    </div>
+
+    <br/>
+    <button type="submit">Salvar Projeto</button>
+</form>
+
+<hr/>
+<a th:href="@{/projects}">Voltar para a Lista</a>
+</body>
+</html>

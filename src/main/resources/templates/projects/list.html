@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciamento de Projetos</title>
+</head>
+<body>
+<h1>Lista de Projetos</h1>
+
+<a th:href="@{/projects/new}">Criar Novo Projeto</a>
+
+<hr/>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Status</th>
+        <th>Data Início</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.id}">1</td>
+        <td th:text="${project.name}">Projeto Alpha</td>
+        <td th:text="${project.description}">Desenvolvimento do sistema CRUD.</td>
+        <td th:text="${project.completed ? 'Concluído' : 'Em Andamento'}">Em Andamento</td>
+        <td th:text="${project.startDate}">2025-01-01</td>
+        <td>
+            <a th:href="@{/projects/edit/{id}(id=${project.id})}">Editar</a>
+            |
+            <form th:action="@{/projects/delete/{id}(id=${project.id})}" method="get" style="display:inline;">
+                <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<a th:href="@{/tasks}">Ir para Gerenciamento de Tarefas</a>
+|
+<a th:href="@{/logout}">Sair (Logout)</a>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${task.id == null ? 'Criar Nova Tarefa' : 'Editar Tarefa'}">Formulário Tarefa</title>
+</head>
+<body>
+<h1 th:text="${task.id == null ? 'Criar Nova Tarefa' : 'Editar Tarefa ' + task.id}">Título</h1>
+
+<form th:action="@{/tasks/save}" th:object="${task}" method="post">
+    <input type="hidden" th:field="*{id}">
+
+    <div>
+        <label for="title">Título da Tarefa:</label>
+        <input type="text" id="title" th:field="*{title}" required>
+    </div>
+
+    <div>
+        <label for="description">Descrição:</label>
+        <textarea id="description" th:field="*{description}" rows="3"></textarea>
+    </div>
+
+    <div>
+        <label for="status">Status:</label>
+        <select id="status" th:field="*{status}">
+            <option th:each="status : ${T(com.example.crudapp.model.Task.Status).values()}"
+                    th:value="${status}" th:text="${status}">PENDING</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="project">Associar ao Projeto:</label>
+        <select id="project" th:field="*{project}">
+            <option th:value="null" selected>-- Nenhum Projeto --</option>
+            <option th:each="p : ${projects}"
+                    th:value="${p.id}"
+                    th:text="${p.name}"
+                    th:selected="${task.project != null and task.project.id == p.id}"></option>
+        </select>
+    </div>
+
+    <br/>
+    <button type="submit">Salvar Tarefa</button>
+</form>
+
+<hr/>
+<a th:href="@{/tasks}">Voltar para a Lista</a>
+</body>
+</html>
