@@ -1,0 +1,10 @@
+{
+  "build": {
+    "builder": "DOCKERFILE"
+  },
+  "run": {
+    "env": {
+      "JAVA_OPTS": "-Xmx512m"
+    }
+  }
+}
